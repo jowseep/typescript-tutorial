@@ -3,13 +3,6 @@ import { Payment } from './classes/Payment.js';
 import { HasFormatter } from './interfaces/HasFormatter.js' ;
 import { ListTemplate } from './classes/ListTemplate.js';
 
-interface isPerson {
-    name: string;
-    age: number;
-    walk(a: string): void;
-    speed(a: number): number;
-}
-
 // this starts the HTML elements
 const form = document.querySelector('.new-item-form') as HTMLFormElement;
 
@@ -21,16 +14,19 @@ const amount = document.querySelector('#amount') as HTMLInputElement;
 const ul = document.querySelector('ul')!;
 const list = new ListTemplate(ul);
 
+let values: [string, string, number];
+values = [toFrom.value, details.value, amount.valueAsNumber];
+
 form.addEventListener('submit', (e: Event) => {
     e.preventDefault();
 
     let doc: HasFormatter;
 
     if(type.value==='invoice') {
-        doc = new Invoice(toFrom.value, details.value, amount.valueAsNumber);
+        doc = new Invoice(...values);
     } else {
-        doc = new Payment(toFrom.value, details.value, amount.valueAsNumber);
+        doc = new Payment(...values);
     }
 
     list.render(doc, type.value, 'end');
-})
+});
